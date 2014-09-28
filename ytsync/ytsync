@@ -1,0 +1,91 @@
+#!/usr/bin/env python
+import os
+import sys
+import json
+from argparse import ArgumentParser
+
+script_abs_path = os.path.dirname(os.path.abspath(__file__))
+script_parent_dir = script_abs_path.rsplit('/', 1)[0]
+sys.path.append(script_parent_dir)
+
+from ytsync.playlist_data import PlaylistData
+from ytsync.downloader import Downloader
+from ytsync.converter import Converter
+from ytsync.filter import Filter
+
+class CorruptedSyncList(Exception):
+    pass
+
+
+def parse_arguments():
+    """
+    Parsing command line arguments in suitable and easy to use format.
+    """
+    args_parser = ArgumentParser(description=('Class for handling the'
+                                              'input and playlist data'))
+    args_parser.add_argument('-u', '--url',
+                             help=("Url to the playlist "
+                                   "which to be downloaded."))
+    args_parser.add_argument('-t', '--target-dir',
+                             help=("Target directory for "
+                                   "downloading files."))
+    args_parser.add_argument('-c', '--convert_to',
+                             help=("When files have been downloaded "
+                                   "they will be converted to the given "
+                                   "file format."))
+    args_parser.add_argument('-q', '--quite',
+                             help=("Normal quite mode - no outut will be "
+                                   "printed out."))
+
+    return vars(args_parser.parse_args())
+
+
+def process_playlist_sync(url, target_dir):
+    if not os.path.exists(target_dir):
+        raise FileNotFoundError('Directory "{}" does not exists !'
+                                .format(target_dir))
+
+    playlist_data = PlaylistData(url)
+    streams_to_download = playlist_data.best_streams
+
+    # streams_to_download = Filter.filter_streams(streams_to_download,
+    #                                             target_dir)
+
+    downloader = Downloader(streams_to_download, target_dir)
+    downloader.process_download()
+
+    converter = Converter(target_dir)
+    converter.process_conversion()
+
+
+def process_sync_list():
+    sync_list_abs_path = "/".join([script_abs_path, "settings/sync_list"])
+    sync_list_content = None
+    with open(sync_list_abs_path, 'r') as sync_list_file:
+        try:
+            sync_list_content = json.load(sync_list_file)
+        except ValueError:
+            error_message = ('JSON file "{}" is corrupted.'
+                             'Synchronization failed.'
+                             .format(sync_list_abs_path))
+            print(error_message)
+            return
+
+    if sync_list_content is not None:
+        for playlist_data in sync_list_content:
+            process_playlist_sync(playlist_data['url'],
+                                  playlist_data['target_dir'])
+
+
+def main():
+    given_args = parse_arguments()
+    url = given_args['url']
+    target_dir = given_args['target_dir']
+
+    if url is not None and target_dir is not None:
+        process_playlist_sync(url, target_dir)
+    else:
+        process_sync_list()
+
+if __name__ == '__main__':
+    main()

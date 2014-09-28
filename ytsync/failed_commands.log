@@ -1,0 +1,34 @@
+28/9/2014 , 15:23:56
+
+COMMAND:
+avconv -loglevel verbose -i /home/dragonator/Desktop/test/Carmina Burana - I. O Fortuna (w/ English subtitles).m4a -acodec copy -vn /home/dragonator/Desktop/test/Carmina Burana - I. O Fortuna (w/ English subtitles).REMUXED.m4a
+
+OUTPUT:
+
+
+ERRORS:
+avconv version v12_dev0-124-g5517466, Copyright (c) 2000-2014 the Libav developers
+  built on Sep 28 2014 15:11:28 with gcc 4.9.1 (GCC) 20140903 (prerelease)
+  configuration: 
+  libavutil     54.  3. 0 / 54.  3. 0
+  libavcodec    56.  1. 0 / 56.  1. 0
+  libavformat   56.  5. 0 / 56.  5. 0
+  libavdevice   55.  0. 0 / 55.  0. 0
+  libavfilter    5.  0. 0 /  5.  0. 0
+  libavresample  2.  1. 0 /  2.  1. 0
+  libswscale     3.  0. 0 /  3.  0. 0
+/home/dragonator/Desktop/test/Carmina Burana - I. O Fortuna (w/ English subtitles).m4a: No such file or directory
+
+----------------------------------------
+28/9/2014 , 15:23:56
+
+COMMAND:
+rm /home/dragonator/Desktop/test/Carmina Burana - I. O Fortuna (w/ English subtitles).m4a
+
+OUTPUT:
+
+
+ERRORS:
+rm: cannot remove ‘/home/dragonator/Desktop/test/Carmina Burana - I. O Fortuna (w/ English subtitles).m4a’: No such file or directory
+
+----------------------------------------
