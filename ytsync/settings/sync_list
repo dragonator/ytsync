@@ -1,9 +1,0 @@
-[
-    {
-        "_comment": "All values, which keys starts with '_' are ignored by the app.They are just for humans clarity",
-        "_playlist_name": "PLAYLIST_NAME",
-        "_playlist_author": "PLAYLIST_AUTHOR",
-        "url": "https://www.youtube.com/playlist?list=PLKxmIVeZ2xNt1kGET6F0UB4q-OVeEc1f2",
-        "target_dir": "/home/dragonator/Desktop/test"
-    }
-]
