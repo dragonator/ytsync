@@ -13,9 +13,6 @@ from ytsync.downloader import Downloader
 from ytsync.converter import Converter
 from ytsync.filter import Filter
 
-class CorruptedSyncList(Exception):
-    pass
-
 
 def parse_arguments():
     """
@@ -47,9 +44,10 @@ def process_playlist_sync(url, target_dir):
 
     playlist_data = PlaylistData(url)
     streams_to_download = playlist_data.best_streams
+    streams_to_download = playlist_data.normalize_names(streams_to_download)
 
-    # streams_to_download = Filter.filter_streams(streams_to_download,
-    #                                             target_dir)
+    streams_to_download = Filter.remove_present_streams(streams_to_download,
+                                                        target_dir)
 
     downloader = Downloader(streams_to_download, target_dir)
     downloader.process_download()

@@ -34,11 +34,13 @@ class Downloader:
     def remux(self, song_full_path):
         file_extension = song_full_path.rsplit('.', 1)[-1]
         file_path_without_extension = song_full_path.rsplit('.', 1)[0]
+
+        print('\nRemuxing "{}"'.format(song_full_path))
+
         output_file_name =\
             file_path_without_extension + ".REMUXED." + file_extension
-        Executor.execute(["avconv", "-loglevel", "verbose", "-i",
-                         song_full_path, "-acodec", "copy", "-vn",
-                         output_file_name])
+        Executor.execute(["ffmpeg", "-i", song_full_path, "-acodec",
+                         "copy", "-vn", output_file_name])
 
         Executor.execute(["rm", song_full_path])
         os.rename(output_file_name, song_full_path)
@@ -46,4 +48,6 @@ class Downloader:
     def add_url_tag(self, song_full_path, url_tag_value):
         tag_obj = taglib.File(song_full_path)
         tag_obj.tags['URL'] = url_tag_value
+        # Replace URL with ID of the video.
+        # The ID is extracted from the value of "_parent" key.
         tag_obj.save()

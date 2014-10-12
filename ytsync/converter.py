@@ -47,15 +47,15 @@ class Converter:
     def process_conversion(self):
         print("\n\n")
         for song in self.files_to_convert:
-            current_format = song.rsplit('.', 1)[-1]
+            current_format = ".{}".format(song.rsplit('.', 1)[-1])
 
             old_file = '{}{}{}'.format(self.target_dir, os.sep, song)
             new_file = '{}{}{}'.format(self.target_dir, os.sep,
-                                       song.replace(current_format, 'mp3'))
+                                       song.replace(current_format, '.mp3'))
 
             message = "Converting {} to 'mp3' format...".format(old_file)
             print(message)
 
-            command = ["ffmpeg", "-i", old_file, new_file]
-            Executor.execute(command)
+            Executor.execute(["ffmpeg", "-i", old_file, new_file])
+            print('Deleting "{}"'.format(old_file))
             Executor.execute(["rm", old_file])

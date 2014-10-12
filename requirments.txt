@@ -1,2 +1,2 @@
 Pafy==0.3.62
-ffmpeg==2.2.3
+avconv

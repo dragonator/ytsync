@@ -2,6 +2,7 @@ import pafy
 
 
 class PlaylistData:
+    UNSUPPORTED_CHARS = ['\\', '/', '?', '*', '"', ':', '<', '>', '#', '%']
 
     def __init__(self, url):
         self._url = url
@@ -45,3 +46,11 @@ class PlaylistData:
         self._songs_names = []
         for stream in self.best_streams:
             self._songs_names.append(stream.title)
+
+    @classmethod
+    def normalize_names(cls, streams_list):
+        for stream in streams_list:
+            for char in cls.UNSUPPORTED_CHARS:
+                stream._title = stream.title.replace(char, '')
+
+        return streams_list
