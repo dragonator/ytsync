@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import os
 import sys
 import json
@@ -46,13 +46,16 @@ def process_playlist_sync(url, target_dir):
     streams_to_download = playlist_data.best_streams
     streams_to_download = playlist_data.normalize_names(streams_to_download)
 
-    streams_to_download = Filter.remove_present_streams(streams_to_download,
-                                                        target_dir)
+    # streams_to_download = Filter.remove_present_streams(streams_to_download,
+    #                                                    target_dir)
 
-    downloader = Downloader(streams_to_download, target_dir)
+    playlist_title = playlist_data._pafy_data["title"]
+    playlist_dir = '{}/{}'.format(target_dir, playlist_title)
+
+    downloader = Downloader(streams_to_download, playlist_dir)
     downloader.process_download()
 
-    converter = Converter(target_dir)
+    converter = Converter(playlist_dir)
     converter.process_conversion()
 
 

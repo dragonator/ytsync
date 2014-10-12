@@ -56,6 +56,6 @@ class Converter:
             message = "Converting {} to 'mp3' format...".format(old_file)
             print(message)
 
-            Executor.execute(["ffmpeg", "-i", old_file, new_file])
+            Executor.execute(["avconv", "-i", old_file, new_file])
             print('Deleting "{}"'.format(old_file))
             Executor.execute(["rm", old_file])

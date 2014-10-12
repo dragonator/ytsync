@@ -1,3 +1,5 @@
+import re
+
 import pafy
 
 
@@ -38,7 +40,17 @@ class PlaylistData:
     def get_best_streams(self):
         self._best_streams = []
         for element in self.pafy_data['items']:
-            curr_elem_best_stream = element['pafy'].getbestaudio()
+            try:
+                curr_elem_best_stream = element['pafy'].getbestaudio()
+            except OSError as msg:
+                video_id = element["pafy"].videoid
+                video_title = element["pafy"].title
+
+                msg = re.sub(r"\[{}\]".format(video_id),
+                             r"\n[{}]".format(video_title),
+                             str(msg))
+                print(msg)
+
             if curr_elem_best_stream is not None:
                 self._best_streams.append(curr_elem_best_stream)
 
