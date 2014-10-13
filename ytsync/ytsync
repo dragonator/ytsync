@@ -5,7 +5,7 @@ import json
 from argparse import ArgumentParser
 
 script_abs_path = os.path.dirname(os.path.abspath(__file__))
-script_parent_dir = script_abs_path.rsplit('/', 1)[0]
+script_parent_dir = script_abs_path.rsplit(os.sep, 1)[0]
 sys.path.append(script_parent_dir)
 
 from ytsync.playlist_data import PlaylistData
@@ -50,7 +50,7 @@ def process_playlist_sync(url, target_dir):
     #                                                    target_dir)
 
     playlist_title = playlist_data._pafy_data["title"]
-    playlist_dir = '{}/{}'.format(target_dir, playlist_title)
+    playlist_dir = '{}{}{}'.format(target_dir, os.sep, playlist_title)
 
     downloader = Downloader(streams_to_download, playlist_dir)
     downloader.process_download()
@@ -60,7 +60,7 @@ def process_playlist_sync(url, target_dir):
 
 
 def process_sync_list():
-    sync_list_abs_path = "/".join([script_abs_path, "settings/sync_list"])
+    sync_list_abs_path = os.sep.join([script_abs_path, "settings", "sync_list"])
     sync_list_content = None
     with open(sync_list_abs_path, 'r') as sync_list_file:
         try:

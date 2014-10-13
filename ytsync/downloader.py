@@ -25,8 +25,8 @@ class Downloader:
         if not os.path.exists(self._target_dir):
             os.mkdir(self._target_dir)
         for stream in self._streams:
-            song_full_path = '/'.join([self._target_dir,
-                                      stream.title+'.'+stream.extension])
+            song_full_path = os.sep.join([self._target_dir,
+                                         stream.title+'.'+stream.extension])
 
             # if os.path.exists(song_full_path):
             #     print("Skipping {}".format(stream.title))

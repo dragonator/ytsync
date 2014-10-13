@@ -7,12 +7,13 @@ current_os = sys.platform
 os_commands = {'linux': 'xdg-open', 'win32': 'start', 'darwin': 'open'}
 
 script_abs_path = os.path.dirname(os.path.abspath(__file__))
-script_parent_dir = script_abs_path.rsplit('/', 1)[0]
+script_parent_dir = script_abs_path.rsplit(os.sep, 1)[0]
 sys.path.append(script_parent_dir)
 
 from ytsync.executor import Executor
 
-sync_list_path = '{}/settings/sync_list'.format(script_abs_path)
+sync_list_path = '{}{}settings{}sync_list'.format(script_abs_path,
+                                                  os.sep, os.sep)
 
 command = None
 
