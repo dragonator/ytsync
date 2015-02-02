@@ -1,6 +1,5 @@
 import os
-
-# import taglib
+import glob
 
 from ytsync.executor import Executor
 
@@ -28,33 +27,12 @@ class Downloader:
             song_full_path = os.sep.join([self._target_dir,
                                          stream.title+'.'+stream.extension])
 
-            # if os.path.exists(song_full_path):
-            #     print("Skipping {}".format(stream.title))
-            #     continue
+            os.chdir(self._target_dir)
+            songs_in_dir = glob.glob("*")
 
-            print("\n Downloading {}...".format(stream.title))
+            if (stream.title+".mp3") in songs_in_dir:
+                print("Skipping {}".format(stream.title))
+                continue
+
+            print("Downloading {} ...".format(stream.title))
             stream.download(self._target_dir)
-
-            self.remux(song_full_path)
-            # self.add_url_tag(song_full_path, stream.url)
-
-    def remux(self, song_full_path):
-        file_extension = song_full_path.rsplit('.', 1)[-1]
-        file_path_without_extension = song_full_path.rsplit('.', 1)[0]
-
-        print('\nRemuxing "{}"'.format(song_full_path))
-
-        output_file_name =\
-            file_path_without_extension + ".REMUXED." + file_extension
-        Executor.execute(["avconv", "-i", song_full_path, "-acodec",
-                         "copy", "-vn", output_file_name])
-
-        Executor.execute(["rm", song_full_path])
-        os.rename(output_file_name, song_full_path)
-
-    def add_url_tag(self, song_full_path, url_tag_value):
-        tag_obj = taglib.File(song_full_path)
-        tag_obj.tags['URL'] = url_tag_value
-        # Replace URL with ID of the video.
-        # The ID is extracted from the value of "_parent" key.
-        tag_obj.save()

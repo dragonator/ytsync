@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 import os
 import sys
 import json
@@ -63,17 +63,23 @@ def process_sync_list():
     sync_list_abs_path = os.sep.join([script_abs_path, "settings", "sync_list"])
     sync_list_content = None
     with open(sync_list_abs_path, 'r') as sync_list_file:
-        try:
-            sync_list_content = json.load(sync_list_file)
-        except ValueError:
-            error_message = ('JSON file "{}" is corrupted.'
-                             'Synchronization failed.'
-                             .format(sync_list_abs_path))
-            print(error_message)
-            return
+        records = sync_list_file.read().split("\n\n")
+        sync_list = []
+        for record in records:
+            splitted = record.split("\n")
+            sync_list.append({"url": splitted[0], "target_dir":splitted[1]})
 
-    if sync_list_content is not None:
-        for playlist_data in sync_list_content:
+        #try:
+            #sync_list_content = json.load(sync_list_file)
+        #except ValueError:
+            #error_message = ('JSON file "{}" is corrupted.'
+                             #'Synchronization failed.'
+                             #.format(sync_list_abs_path))
+            #print(error_message)
+            #return
+
+    if sync_list is not None:
+        for playlist_data in sync_list:
             process_playlist_sync(playlist_data['url'],
                                   playlist_data['target_dir'])
 

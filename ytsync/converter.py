@@ -18,31 +18,18 @@ class Converter:
         return self._target_dir
 
     @property
-    def unsupported_formats(self):
-        if self._unsupported_formats is None:
-            self.get_unsupported_formats()
-        return self._unsupported_formats
-
-    @property
     def files_to_convert(self):
         if self._files_to_convert is None:
             self.get_unsupported_files()
         return self._files_to_convert
 
-    def get_unsupported_formats(self):
-        self._unsupported_formats = []
-        global script_abs_path
-        dir = '{}'.format(os.sep)\
-            .join([script_abs_path, 'settings', 'unsupported_formats'])
-        with open(dir) as unsupported_formats:
-            content = unsupported_formats.read()
-            self._unsupported_formats = content.split('\n')
-
     def get_unsupported_files(self):
         self._files_to_convert = []
         os.chdir(self.target_dir)
-        for format in self.unsupported_formats:
-            self._files_to_convert += glob.glob('*.'+format)
+        self._files_to_convert = glob.glob("*")
+        for song_name in self._files_to_convert:
+            if song_name.endswith(".mp3"):
+                self._files_to_convert.remove(song_name)
 
     def process_conversion(self):
         print("\n\n")
@@ -57,5 +44,5 @@ class Converter:
             print(message)
 
             Executor.execute(["avconv", "-i", old_file, new_file])
-            print('Deleting "{}"'.format(old_file))
+            print('Deleting {}'.format(old_file))
             Executor.execute(["rm", old_file])
