@@ -12,8 +12,12 @@ sys.path.append(script_parent_dir)
 
 from ytsync.executor import Executor
 
-sync_list_path = '{}{}settings{}sync_list'.format(script_abs_path,
-                                                  os.sep, os.sep)
+settings_dir = '{}{}settings'.format(script_abs_path, os.sep)
+print(settings_dir)
+if not os.path.exists(settings_dir):
+    Executor.execute(["mkdir", settings_dir])
+
+sync_list_path = '{}{}sync_list'.format(settings_dir, os.sep)
 if not os.path.exists(sync_list_path):
     Executor.execute(["touch", sync_list_path])
 
