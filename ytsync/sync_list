@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-
 import os
 import sys
+
+from ytsync.executor import Executor
 
 current_os = sys.platform
 os_commands = {'linux': 'xdg-open', 'win32': 'start', 'darwin': 'open'}
@@ -10,19 +11,19 @@ script_abs_path = os.path.dirname(os.path.abspath(__file__))
 script_parent_dir = script_abs_path.rsplit(os.sep, 1)[0]
 sys.path.append(script_parent_dir)
 
-from ytsync.executor import Executor
 
+# Check if settings directory exists and create it if it doesn't
 settings_dir = '{}{}settings'.format(script_abs_path, os.sep)
-print(settings_dir)
 if not os.path.exists(settings_dir):
     Executor.execute(["mkdir", settings_dir])
 
+# Check if sync_list file exists and create it if it doesn't
 sync_list_path = '{}{}sync_list'.format(settings_dir, os.sep)
 if not os.path.exists(sync_list_path):
     Executor.execute(["touch", sync_list_path])
 
+# Get needed command to open default text editor depending on the OS
 command = None
-
 if 'linux' in current_os:
     command = os_commands['linux']
 elif 'win32' in current_os:
