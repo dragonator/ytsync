@@ -61,7 +61,7 @@ def process_sync_list():
     sync_list_abs_path = os.sep.join([script_abs_path, 'settings', 'sync_list'])
 
     if not os.path.exists(sync_list_abs_path):
-        os.system(os.sep.join([script_abs_path, 'sync_list']))
+        os.system(os.sep.join(['python '+script_abs_path, 'edit_sync_list.py']))
 
     with open(sync_list_abs_path, 'r') as sync_list_file:
         records = sync_list_file.read().split('\n\n')[:-1]

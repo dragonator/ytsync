@@ -1,7 +1,7 @@
 import os
 import glob
 
-from ytsync.executor import Executor
+from executor import Executor
 
 script_abs_path = os.path.dirname(os.path.abspath(__file__))
 

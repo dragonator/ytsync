@@ -1,8 +1,6 @@
 import os
 import glob
 
-from ytsync.executor import Executor
-
 
 class Downloader:
 
@@ -23,10 +21,8 @@ class Downloader:
         print('\nSyncing playlist "{}":\n'.format(self._playlist_name))
         if not os.path.exists(self._target_dir):
             os.mkdir(self._target_dir)
-        for stream in self._streams:
-            song_full_path = os.sep.join([self._target_dir,
-                                         stream.title+'.'+stream.extension])
 
+        for stream in self._streams:
             os.chdir(self._target_dir)
             songs_in_dir = glob.glob("*")
 
