@@ -7,9 +7,9 @@ script_abs_path = os.path.dirname(os.path.abspath(__file__))
 script_parent_dir = script_abs_path.rsplit(os.sep, 1)[0]
 sys.path.append(script_parent_dir)
 
-from ytsync.playlist_data import PlaylistData
-from ytsync.downloader import Downloader
-from ytsync.converter import Converter
+from playlist_data import PlaylistData
+from downloader import Downloader
+from converter import Converter
 
 
 def parse_arguments():
