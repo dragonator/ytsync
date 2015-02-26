@@ -57,11 +57,14 @@ def process_playlist_sync(url, target_dir):
     converter.process_conversion()
 
 
-def process_sync_list():
-    sync_list_abs_path = os.sep.join([script_abs_path, 'settings', 'sync_list'])
+def process_sync_list(sync_list_abs_path=\
+                      os.sep.join([script_abs_path, 'settings', 'sync_list'])):
 
     if not os.path.exists(sync_list_abs_path):
-        os.system(os.sep.join(['python '+script_abs_path, 'edit_sync_list.py']))
+        try:
+            os.system(os.sep.join(['python '+script_abs_path, 'edit_sync_list.py']))
+        except:
+            return
 
     with open(sync_list_abs_path, 'r') as sync_list_file:
         records = sync_list_file.read().split('\n\n')[:-1]
