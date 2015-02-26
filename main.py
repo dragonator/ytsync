@@ -42,7 +42,7 @@ class TestApp(App):
         url_input = TextInput()
 
         target_dir_label = Label(text='Download in:')
-        self.target_dir_input = TextInput()
+        target_dir_input = TextInput()
         target_dir_browse = Button(text='Browse')
         target_dir_browse.bind(on_release=partial(self.open_dir_browser))
 
@@ -82,8 +82,8 @@ class TestApp(App):
                      on_submit=partial(self.select_dir))
         self.switch_to(browser, '')
 
-    def select_dir(self, instance):
-        selection = str(instance.selection)[3:-2]
+    def select_dir(self, textinput , browser_instance):
+        selection = str(browser_instance.selection)[3:-2]
         if not os.path.isdir(selection):
             selection = selection.rsplit(os.sep, 1)[0]
 
