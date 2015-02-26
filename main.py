@@ -51,7 +51,8 @@ class TestApp(App):
 
         buttons_layout = BoxLayout()
         save_button = Button(text='Save')
-        save_button.bind(on_release=partial(self.switch_to, self.major_layout))
+        save_button.bind(on_release=partial(self.save_sync_list_content,
+                                            content_textinput))
         buttons_layout.add_widget(save_button)
         cancel_button = Button(text='Cancel')
         cancel_button.bind(on_release=partial(self.switch_to, self.major_layout))
@@ -60,17 +61,21 @@ class TestApp(App):
         self.sync_list_layout.add_widget(content_textinput)
         self.sync_list_layout.add_widget(buttons_layout)
 
-        self.visible_layout.add_widget(self.sync_list_layout)
+        self.switch_to(self.sync_list_layout, '')
 
     def switch_to(self, widget, _):
         self.visible_layout.clear_widgets()
         self.visible_layout.add_widget(widget)
 
-    def save_sync_list_content(self, content):
+    def save_sync_list_content(self, textinput_widget, _):
+        textinput_widget.select_all()
+        content = textinput_widget.selection_text
         sync_list_path = \
             os.sep.join([self.user_data_dir, 'settings', 'sync_list.txt'])
         with open(sync_list_path, 'w') as sync_file:
             sync_file.write(content)
+
+        self.switch_to(self.major_layout, '')
 
     def remove_childrens(self, widget, _):
         widget.clear_widgets()
