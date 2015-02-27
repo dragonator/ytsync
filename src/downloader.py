@@ -22,13 +22,13 @@ class Downloader:
         if not os.path.exists(self._target_dir):
             os.mkdir(self._target_dir)
 
+        os.chdir(self._target_dir)
+        songs_in_dir = glob.glob("*")
         for stream in self._streams:
-            os.chdir(self._target_dir)
-            songs_in_dir = glob.glob("*")
 
             if (stream.title+".mp3") in songs_in_dir:
                 print("Skipping {}".format(stream.title))
                 continue
 
             print("Downloading {} ...".format(stream.title))
-            stream.download(self._target_dir)
+            stream.download(self._target_dir, quiet=True)

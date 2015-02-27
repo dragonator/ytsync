@@ -26,13 +26,13 @@ class Converter:
     def get_unsupported_files(self):
         self._files_to_convert = []
         os.chdir(self.target_dir)
-        self._files_to_convert = glob.glob("*")
-        for song_name in self._files_to_convert:
-            if song_name.endswith(".mp3"):
-                self._files_to_convert.remove(song_name)
+        folder_files = glob.glob('*')
+        for song_name in folder_files:
+            if not song_name.endswith('.mp3') and\
+               not song_name.endswith('.log'):
+                self._files_to_convert.append(song_name)
 
     def process_conversion(self):
-        print("\n\n")
         for song in self.files_to_convert:
             current_format = ".{}".format(song.rsplit('.', 1)[-1])
 
@@ -43,6 +43,7 @@ class Converter:
             message = "Converting {} to 'mp3' format...".format(old_file)
             print(message)
 
-            Executor.execute(["avconv", "-i", old_file, new_file])
-            print('Deleting {}'.format(old_file))
-            Executor.execute(["rm", old_file])
+            avconv_call = ["avconv", "-i", old_file, new_file]
+            if Executor.execute(avconv_call):
+                print('Deleting {}'.format(old_file))
+                Executor.execute(["rm", old_file])
