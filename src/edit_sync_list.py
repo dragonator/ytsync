@@ -18,7 +18,7 @@ if not os.path.exists(settings_dir):
     Executor.execute(["mkdir", settings_dir])
 
 # Check if sync_list file exists and create it if it doesn't
-sync_list_path = '{}{}sync_list'.format(settings_dir, os.sep)
+sync_list_path = '{}{}sync_list.txt'.format(settings_dir, os.sep)
 if not os.path.exists(sync_list_path):
     Executor.execute(["touch", sync_list_path])
 

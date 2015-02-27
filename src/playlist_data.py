@@ -35,6 +35,7 @@ class PlaylistData:
         return self._pafy_data
 
     def get_pafy_data(self):
+        print('Getting playlist information...')
         self._pafy_data = pafy.get_playlist(self.url)
 
     def get_best_streams(self):
