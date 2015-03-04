@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
-from threading import Thread
+from threading import Thread, Event
 from functools import partial
 
 import kivy
@@ -13,10 +13,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.scrollview import ScrollView
 from kivy.garden.filebrowser import FileBrowser
-import logging
-from kivy.logger import Logger
 from kivy.lang import Builder
-kivy.require('1.7.2')
+kivy.require('1.8.0')
 __version__ = '1.0'
 
 from src.ytsync import process_sync_list, process_playlist_sync
@@ -31,8 +29,6 @@ Builder.load_string('''
         text: root.text
 ''')
 
-Logger.setLevel(logging.ERROR)
-
 
 class ScrollableLabel(ScrollView):
     text = StringProperty('')
@@ -41,6 +37,21 @@ class ScrollableLabel(ScrollView):
         current_text = self.text
         new_text = current_text + str(to_print)
         self.text = new_text
+
+
+class StoppableThread(Thread):
+    """Thread class with a stop() method. The thread itself has to check
+    regularly for the stopped() condition."""
+
+    def __init__(self, **kwargs):
+        super(StoppableThread, self).__init__(**kwargs)
+        self._stop = Event()
+
+    def stop(self):
+        self._stop.set()
+
+    def stopped(self):
+        return self._stop.isSet()
 
 
 class TestApp(App):
@@ -52,7 +63,7 @@ class TestApp(App):
     def process_sync_list_wrapper(self,  _):
         sync_list_path = self.get_sync_list_fullpath()
         thread_func = partial(process_sync_list, sync_list_path)
-        sync_thread = Thread(target=thread_func)
+        sync_thread = StoppableThread(target=thread_func)
         self.threads.append(sync_thread)
         sync_thread.start()
 
@@ -60,7 +71,7 @@ class TestApp(App):
         url = self.get_textinput_content(self.url_input)
         target_dir = self.get_textinput_content(self.target_dir_input)
         thread_func = partial(process_playlist_sync, url, target_dir)
-        sync_thread = Thread(target=thread_func)
+        sync_thread = StoppableThread(target=thread_func)
         self.threads.append(sync_thread)
         sync_thread.start()
 
@@ -90,6 +101,7 @@ class TestApp(App):
 
         output_label = ScrollableLabel()
         sys.stdout = output_label
+        sys.stderr = output_label
 
         self.major_layout = BoxLayout(orientation='vertical',
                                       pos_hint={'top': 1})
@@ -179,8 +191,7 @@ class TestApp(App):
 
     def on_stop(self):
         for thread in self.threads:
-            thread.kill()
-        print("fffffffffffffffffffffff")
+            thread.stop()
         return True
 
 if __name__ == '__main__':
