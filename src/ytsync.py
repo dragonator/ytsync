@@ -40,8 +40,8 @@ def parse_arguments():
 
 def process_playlist_sync(url, target_dir):
     if not os.path.exists(target_dir):
-        raise FileNotFoundError('Directory "{}" does not exists !'
-                                .format(target_dir))
+        raise Exception('Directory "{}" does not exists !'
+                        .format(target_dir))
 
     playlist_data = PlaylistData(url)
     streams_to_download = playlist_data.best_streams
@@ -56,6 +56,8 @@ def process_playlist_sync(url, target_dir):
     print
     converter = Converter(playlist_dir)
     converter.process_conversion()
+
+    print('Syncing of playlist "{}" has completed.'.format(playlist_title))
 
 
 def process_sync_list(sync_list_abs_path=os.sep.join([script_abs_path,
