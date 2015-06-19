@@ -5,12 +5,19 @@ from datetime import datetime
 class Executor(object):
 
     @classmethod
+    def print_utf(cls, message):
+        try:
+            print(message)
+        except UnicodeDecodeError:
+            cls.execute("echo {}".format(message))
+
+    @classmethod
     def execute(cls, command):
         """
         Executing a given command and
         writing in a log file in cases where errors arise.
         """
-        p = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        p = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
         output, err = p.communicate()
         if p.returncode:
             with open("failed_commands.log", 'a') as log:

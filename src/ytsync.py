@@ -9,7 +9,7 @@ sys.path.append(script_parent_dir)
 
 from playlist_data import PlaylistData
 from downloader import Downloader
-from converter import Converter
+# from converter import Converter
 
 
 def parse_arguments():
@@ -40,8 +40,8 @@ def parse_arguments():
 
 def process_playlist_sync(url, target_dir):
     if not os.path.exists(target_dir):
-        raise Exception('Directory "{}" does not exists !'
-                        .format(target_dir))
+        raise FileNotFoundError('Directory "{}" does not exists !'
+                                .format(target_dir))
 
     playlist_data = PlaylistData(url)
     streams_to_download = playlist_data.best_streams
@@ -53,9 +53,9 @@ def process_playlist_sync(url, target_dir):
     downloader = Downloader(streams_to_download, playlist_dir)
     downloader.process_download()
 
-    print
-    converter = Converter(playlist_dir)
-    converter.process_conversion()
+    print("\nSkipping converting.")
+    # converter = Converter(playlist_dir)
+    # converter.process_conversion()
 
     print('Syncing of playlist "{}" has completed.'.format(playlist_title))
 
