@@ -9,7 +9,7 @@ sys.path.append(script_parent_dir)
 
 from playlist_data import PlaylistData
 from downloader import Downloader
-from converter import Converter
+# from converter import Converter
 
 
 def parse_arguments():
@@ -53,9 +53,11 @@ def process_playlist_sync(url, target_dir):
     downloader = Downloader(streams_to_download, playlist_dir)
     downloader.process_download()
 
-    print
-    converter = Converter(playlist_dir)
-    converter.process_conversion()
+    print("\nSkipping converting.")
+    # converter = Converter(playlist_dir)
+    # converter.process_conversion()
+
+    print('Syncing of playlist "{}" has completed.'.format(playlist_title))
 
 
 def process_sync_list(sync_list_abs_path=os.sep.join([script_abs_path,

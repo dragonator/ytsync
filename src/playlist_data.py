@@ -35,6 +35,7 @@ class PlaylistData:
         return self._pafy_data
 
     def get_pafy_data(self):
+        print('Getting playlist information...')
         self._pafy_data = pafy.get_playlist(self.url)
 
     def get_best_streams(self):
@@ -42,7 +43,7 @@ class PlaylistData:
         for element in self.pafy_data['items']:
             try:
                 curr_elem_best_stream = element['pafy'].getbestaudio()
-            except OSError as msg:
+            except (IOError, OSError) as msg:
                 video_id = element["pafy"].videoid
                 video_title = element["pafy"].title
 
@@ -50,6 +51,8 @@ class PlaylistData:
                              r"\n[{}]".format(video_title),
                              str(msg))
                 print(msg)
+            except (KeyError, ValueError):
+                continue
 
             if curr_elem_best_stream is not None:
                 self._best_streams.append(curr_elem_best_stream)

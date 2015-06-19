@@ -1,34 +1,37 @@
 import os
 import glob
+from executor import Executor
 
 
 class Downloader:
 
     def __init__(self, streams, target_dir):
-        self._streams = streams
-        self._target_dir = target_dir
-        self._playlist_name = target_dir.rsplit(os.sep)[-1]
+        self.streams = streams
+        self.target_dir = target_dir
+        self.playlist_name = target_dir.rsplit(os.sep)[-1]
 
     @property
     def streams(self):
-        return self._streams
+        return self.streams
 
     @property
     def target_dir(self):
-        return self._target_dir
+        return self.target_dir
 
     def process_download(self):
-        print('\nSyncing playlist "{}":\n'.format(self._playlist_name))
-        if not os.path.exists(self._target_dir):
-            os.mkdir(self._target_dir)
+        print('\nSyncing playlist "{}":\n'.format(self.playlist_name))
+        if not os.path.exists(self.target_dir):
+            os.mkdir(self.target_dir)
 
-        os.chdir(self._target_dir)
+        os.chdir(self.target_dir)
         songs_in_dir = glob.glob("*")
-        for stream in self._streams:
-
-            if (stream.title+".mp3") in songs_in_dir:
-                print("Skipping {}".format(stream.title))
+        for index, stream in enumerate(self.streams):
+            if (stream.title.encode("ascii", "ignore")+".mp3") in songs_in_dir:
+                message = u"Skipping {}".format(stream.title)
+                Executor.print_utf(message)
                 continue
 
-            print("Downloading {} ...".format(stream.title))
-            stream.download(self._target_dir, quiet=True)
+            message = u"Downloading {} ...".format(stream.title)
+            Executor.print_utf(message)
+            stream.download(self.target_dir, meta=True,
+                            remux_audio=True, quiet=True)

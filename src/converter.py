@@ -41,9 +41,12 @@ class Converter:
                                        song.replace(current_format, '.mp3'))
 
             message = "Converting {} to 'mp3' format...".format(old_file)
-            print(message)
+            Executor.print_utf(message)
 
-            avconv_call = ["avconv", "-i", old_file, new_file]
+            avconv_call = ["avconv", "-i",
+                           old_file.replace(' ', '\ ').replace('|', '\|'),
+                           new_file.replace(' ', '\ ').replace('|', '\|')]
             if Executor.execute(avconv_call):
-                print('Deleting {}'.format(old_file))
+                message = 'Deleting {}'.format(old_file)
+                Executor.print_utf(message)
                 Executor.execute(["rm", old_file])
