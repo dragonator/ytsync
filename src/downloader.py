@@ -1,6 +1,6 @@
 import os
 import glob
-from executor import Executor
+from .executor import Executor
 
 
 class Downloader:
