@@ -7,8 +7,9 @@ script_abs_path = os.path.dirname(os.path.abspath(__file__))
 script_parent_dir = script_abs_path.rsplit(os.sep, 1)[0]
 sys.path.append(script_parent_dir)
 
-from playlist_data import PlaylistData
-from downloader import Downloader
+from .playlist_data import PlaylistData
+from .edit_sync_list import main as edit_sync_list
+from .downloader import Downloader
 # from converter import Converter
 
 
@@ -40,8 +41,8 @@ def parse_arguments():
 
 def process_playlist_sync(url, target_dir):
     if not os.path.exists(target_dir):
-        raise FileNotFoundError('Directory "{}" does not exists !'
-                                .format(target_dir))
+        print('Directory "{}" does not exists !'.format(target_dir))
+        return
 
     playlist_data = PlaylistData(url)
     streams_to_download = playlist_data.best_streams
@@ -64,12 +65,9 @@ def process_sync_list(sync_list_abs_path=os.sep.join([script_abs_path,
                                                       'settings',
                                                       'sync_list.txt'])):
 
-    if not os.path.exists(sync_list_abs_path):
-        try:
-            os.system(os.sep.join(['python '+script_abs_path,
-                                   'edit_sync_list.py']))
-        except:
-            return
+    if os.stat(sync_list_abs_path).st_size == 0:
+        print("Sync list is empty.")
+        return
 
     with open(sync_list_abs_path, 'r') as sync_list_file:
         records = sync_list_file.read().split('\n\n')
@@ -95,4 +93,5 @@ def main():
         process_sync_list()
 
 if __name__ == '__main__':
+    print(sys.version)
     main()
