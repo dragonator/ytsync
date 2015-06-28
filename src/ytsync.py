@@ -7,9 +7,8 @@ script_abs_path = os.path.dirname(os.path.abspath(__file__))
 script_parent_dir = script_abs_path.rsplit(os.sep, 1)[0]
 sys.path.append(script_parent_dir)
 
-from .playlist_data import PlaylistData
-from .edit_sync_list import main as edit_sync_list
-from .downloader import Downloader
+from playlist_data import PlaylistData
+from downloader import Downloader
 # from converter import Converter
 
 
@@ -64,8 +63,8 @@ def process_playlist_sync(url, target_dir):
 def process_sync_list(sync_list_abs_path=os.sep.join([script_abs_path,
                                                       'settings',
                                                       'sync_list.txt'])):
-
-    if os.stat(sync_list_abs_path).st_size == 0:
+    if not os.path.exists(sync_list_abs_path) or\
+       os.stat(sync_list_abs_path).st_size == 0:
         print("Sync list is empty.")
         return
 
@@ -93,5 +92,4 @@ def main():
         process_sync_list()
 
 if __name__ == '__main__':
-    print(sys.version)
     main()

@@ -2,7 +2,7 @@
 import os
 import sys
 
-from .executor import Executor
+from executor import Executor
 
 
 def main():
