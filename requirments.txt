@@ -1,2 +1,14 @@
-Pafy==0.3.62
-avconv
+Cython==0.20
+Kivy==1.9.0
+Kivy-Garden==0.1.1
+MarkupSafe==0.23
+ant==0.1.0
+argparse==1.2.1
+buildozer==0.30.dev0
+msgpack-python==0.1.10
+pafy==0.3.74
+pexpect==3.3
+pygame==1.9.2rc0
+pyserial==2.5
+requests==2.7.0
+wsgiref==0.1.2

@@ -17,7 +17,7 @@ class Executor(object):
         Executing a given command and
         writing in a log file in cases where errors arise.
         """
-        p = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
+        p = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
         output, err = p.communicate()
         if p.returncode:
             with open("failed_commands.log", 'a') as log:
