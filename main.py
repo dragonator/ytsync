@@ -14,7 +14,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.scrollview import ScrollView
 from kivy.garden.filebrowser import FileBrowser
 from kivy.lang import Builder
-kivy.require('1.8.0')
+kivy.require('1.9.0')
 __version__ = '1.0'
 
 from src.ytsync import process_sync_list, process_playlist_sync
@@ -54,11 +54,11 @@ class StoppableThread(Thread):
         return self._stop.isSet()
 
 
-class TestApp(App):
+class YTSync(App):
 
     def __init__(self, **kwargs):
         self.threads = []
-        super(TestApp, self).__init__(on_stop=self.on_stop, **kwargs)
+        super(YTSync, self).__init__(on_stop=self.on_stop, **kwargs)
 
     def process_sync_list_wrapper(self,  _):
         sync_list_path = self.get_sync_list_fullpath()
@@ -194,6 +194,9 @@ class TestApp(App):
             thread.stop()
         return True
 
+    def on_pause(self):
+        return True
+
 if __name__ == '__main__':
-    app = TestApp()
+    app = YTSync()
     app.run()
